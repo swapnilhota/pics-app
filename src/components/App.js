@@ -5,23 +5,24 @@ require('dotenv').config();
 
 class App extends React.Component {
 
-    onSearchSubmit(term) {
-        axios.get('https://api.unsplash.com/search/photos', {
+    state = { images: [] };
+
+    onSearchSubmit = async (term) => {
+        const response = await axios.get('/search/photos', {
             params: {
                 query: term
             },
-            headers: {
-                Authorization: 'Client-ID E2MCD8pzEu0KMBsXqQIhWLOcJv59wEvFXP6LgaxXbrY'
-            }
-        }).then((response) => {
-            console.log(response);
+
         });
+
+        this.setState({ images: response.data.results });
     }
 
     render() {
         return (
             <div className="ui container" style={{ marginTop: '10px' }}>
                 <SearchBar onSubmit={this.onSearchSubmit} />
+                Found: {this.state.images.length} images
             </div>
         );
     }
